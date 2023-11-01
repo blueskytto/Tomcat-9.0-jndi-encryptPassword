@@ -85,3 +85,53 @@ Tomcat - MariaDB 간의 JNDI 설정하는 법을 기술
               url="jdbc:mariadb://localhost:3306/portal"/>
     </Context>
     ```
+
+
+8. jsp 생성후 호출하여 접속확인
+
+  testDB.jsp
+    
+    ```html
+    <%@ page import="java.sql.*"%>
+    <%@ page import="javax.sql.*"%>
+    <%@ page import="javax.naming.*"%>
+    <%@ page contentType="text/html;charset=utf-8"%>
+    <%
+             Context ctx = null;
+             Connection conn = null;
+             Statement stmt = null;
+             ResultSet rs = null;
+     
+             try {
+                    ctx = new InitialContext();
+                    DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/MyDB");
+                    conn = ds.getConnection();
+                    stmt = conn.createStatement();
+     
+                    out.println("MySQL Connection Success!");
+                    out.println("<br />");
+                    out.println("DB SQL Start");
+     
+                    out.println("<br />");
+                    out.println("<br />");
+     
+                    rs = stmt.executeQuery("select no from TEST_TABLE LIMIT 10000");
+                    out.println("<table border=1>");
+                    out.println("<tr>");
+                    out.println("<th>No</th>");
+                    out.println("</tr>");
+     
+                    while(rs.next()) {
+                        out.println("<tr>");
+                        out.println("<td>" + rs.getString("no") + "</td>");
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
+     
+                    conn.close();
+             }
+             catch(Exception e){
+                  out.println(e);
+             }
+    %>
+    ```
