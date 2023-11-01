@@ -88,8 +88,6 @@ Tomcat - MariaDB 간의 JNDI 설정하는 법을 기술
 
 
 8. jsp 생성후 호출하여 접속확인
-
-  testDB.jsp
     
     ```html
     <%@ page import="java.sql.*"%>
